@@ -118,4 +118,21 @@ public class Queens {
             used[argj] = true;
         }
     }
+
+
+    public void swap(int i, int j) {
+        int aux = vet[i];
+        vet[i] = vet[j];
+        vet[j] = aux;
+    }
+
+    public void copy(Queens q) {
+        if(N != q.N) {
+            vet = new int[q.N];
+            N = q.N;
+        }
+        for (int i = 0; i < q.N; i++) {
+            vet[i] = q.vet[i];
+        }
+    }
 }
