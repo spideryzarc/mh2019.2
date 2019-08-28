@@ -13,16 +13,22 @@ public class HC {
 
     private boolean LS(Sol sol) {
         int fo = sol.FO();
+        boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = i+1; j < os.N; j++) {
                 sol.swap(i,j);
-                if( sol.FO() < fo){
-                    return true;
+                int d = sol.FO();
+                if( d < fo){
+//                    return true;
+                    fo =d;
+                    imp = true;
+                    continue;
                 }
                 sol.swap(i,j);
             }
         }
-        return false;
+//        System.out.println(fo);
+        return imp;
     }
 
 
