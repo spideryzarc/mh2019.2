@@ -11,12 +11,16 @@ public class Main {
 
         RMS rms = new RMS(os,100);
         ILS ils = new ILS(os,100,10,20);
+        VNS vns = new VNS(os,100,new int[][]{{10,20,2},
+                {20,30,2},
+                {30,40,2},
+                {40,50,20}});
         long t = System.currentTimeMillis();
 //        rms.run();
         System.out.println(System.currentTimeMillis()-t);
 
         t = System.currentTimeMillis();
-        ils.run();
+        vns.run();
         System.out.println(System.currentTimeMillis()-t);
 
     }
