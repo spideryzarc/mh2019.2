@@ -7,11 +7,11 @@ public class Sol {
     /**
      * order[j] o pedido na posição j
      */
-    int order[];
+    Integer order[];
 
     public Sol(OS os) {
         this.os = os;
-        order = new int[os.N];
+        order = new Integer[os.N];
         for (int j = 0; j < order.length; j++)
             order[j] = j;
 

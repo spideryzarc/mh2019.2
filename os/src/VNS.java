@@ -67,13 +67,15 @@ public class VNS {
                 K = kwt[v][0];
                 W = kwt[v][1];
                 tries = kwt[v][2];
+            }else{
+                current.copy(best);
             }
 
         }
         return bestFO;
     }
 
-    private void perturb(int[] order) {
+    private void perturb(Integer[] order) {
         for (int i = 0; i < K; i++) {
             int x = Utils.rd.nextInt(os.N);
             int y = x + Utils.rd.nextInt(2 * W) - W;

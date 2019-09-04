@@ -48,7 +48,7 @@ public class ILS {
         return bestFO;
     }
 
-    private void perturb(int[] order) {
+    private void perturb(Integer[] order) {
         for (int i = 0; i < K; i++) {
             int x = Utils.rd.nextInt(os.N);
             int y = x + Utils.rd.nextInt(2 * W) - W;

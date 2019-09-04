@@ -15,12 +15,13 @@ public class Main {
                 {20,30,2},
                 {30,40,2},
                 {40,50,20}});
+        GRASP grasp = new GRASP(os,1000,5);
         long t = System.currentTimeMillis();
 //        rms.run();
         System.out.println(System.currentTimeMillis()-t);
 
         t = System.currentTimeMillis();
-        vns.run();
+        grasp.run();
         System.out.println(System.currentTimeMillis()-t);
 
     }
