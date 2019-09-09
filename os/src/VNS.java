@@ -1,7 +1,9 @@
+import java.util.Arrays;
+
 /**
  * Variable Neighborhood Search
  */
-public class VNS {
+public class VNS implements Solver {
     OS os;
     /**
      * numero de iterações
@@ -22,23 +24,31 @@ public class VNS {
     /**pares de valores kw  e número de tentativas de cada vizinhança */
     private int kwt[][];
 
-
-
+    @Override
+    public String toString() {
+        return "VNS{" +
+                "ite=" + ite +
+                ", kwt=" + Arrays.deepToString(kwt) +
+                '}';
+    }
 
     Sol best;
 
-    public VNS(OS os, int ite, int kwt[][]) {
-        this.os = os;
+    public VNS(int ite, int kwt[][]) {
+
         this.ite = ite;
         this.kwt = kwt;
-        best = new Sol(os);
+
     }
 
     public Sol getSol() {
         return best;
     }
 
-    public int run() {
+    public int run(OS os) {
+        best = new Sol(os);
+        this.os = os;
+
         Sol current = new Sol(os);
         int bestFO = best.FO();
         System.out.println("VNS: " + bestFO);

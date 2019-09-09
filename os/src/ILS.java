@@ -1,8 +1,18 @@
 /**
  * Iterated Local Search
  */
-public class ILS {
+public class ILS implements Solver {
     OS os;
+
+    @Override
+    public String toString() {
+        return "ILS{" +
+                "ite=" + ite +
+                ", K=" + K +
+                ", W=" + W +
+                '}';
+    }
+
     /**
      * numero de iterações
      */
@@ -18,19 +28,22 @@ public class ILS {
 
     Sol best;
 
-    public ILS(OS os, int ite, int k, int w) {
-        this.os = os;
+    public ILS(int ite, int k, int w) {
+
         this.ite = ite;
         this.K = k;
         this.W = w;
-        best = new Sol(os);
+
     }
 
     public Sol getSol() {
         return best;
     }
 
-    public int run() {
+    public int run(OS os) {
+        this.os = os;
+        best = new Sol(os);
+
         Sol current = new Sol(os);
         int bestFO = best.FO();
         System.out.println("ILS: " + bestFO);

@@ -19,7 +19,7 @@ public class Sol {
 
     }
 
-    private int tard[];
+    int tard[];
 
     /**
      * calcula a função objetivo

@@ -5,43 +5,51 @@ import java.util.Comparator;
 import static java.util.Arrays.fill;
 
 /**Random Multi Start*/
-public class GRASP {
+public class GRASP implements Solver{
     OS os;
     int ite;
     Sol best;
     int K;
-    public GRASP(OS os, int ite, int K){
-        this.os = os;
+    public GRASP(int ite, int K){
         this.ite = ite;
-        best = new Sol(os);
         this.K = K;
-        A = new int[os.M];
-        fval = new int[os.N];
-
     }
 
     public Sol getSol(){
         return best;
     }
 
-    public int run(){
+    public int run(OS os){
+        this.os = os;
+        A = new int[os.M];
+        fval = new int[os.N];
+        best = new Sol(os);
+
         Sol current = new Sol(os);
         int bestFO = best.FO();
         VND vnd = new VND(os);
         for (int i = 0; i < ite; i++) {
             randomGreedy1(current);
 //            randomGreedyEDD(current);
-            //System.out.println("ini "+current.FO());
-            int x = current.FO();
-//            int x = vnd.run(current);
+//            System.out.println("ini "+current.FO());
+//            int x = current.FO();
+            int x = vnd.run(current);
             if(x < bestFO){
                 bestFO = x;
                 best.copy(current);
-                System.out.println("GRASP: "+bestFO);
+                System.out.println(i+ " GRASP: "+bestFO);
             }
 
         }
         return bestFO;
+    }
+
+    @Override
+    public String toString() {
+        return "GRASP{" +
+                "ite=" + ite +
+                ", K=" + K +
+                '}';
     }
 
     private ArrayList<Integer> vet = new ArrayList<>();
@@ -66,8 +74,9 @@ public class GRASP {
         }
 //        return os.d[k] -  max;
 //        return os.d[k]+  max;
-        return Math.max(os.d[k],  max);
+//        return Math.max(os.d[k],  max);
 //        return os.d[k] +  max;
+        return Math.max(os.d[k], max);
     }
 
     private int A[], fval[];

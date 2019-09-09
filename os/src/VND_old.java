@@ -1,81 +1,23 @@
-import java.util.Arrays;
-import java.util.Comparator;
-
-import static java.util.Arrays.fill;
-
 /**
  * Variable Neighborhood Descendent
  */
-public class VND {
+public class VND_old {
     OS os;
     private int FO;
-    private Sol current;
-    private int A[][];
-    private int tard[], tardAcc[];
 
-    public VND(OS os) {
+    public VND_old(OS os) {
         this.os = os;
-        A = new int[os.M][os.N];
-        tard = new int[os.N];
-        tardAcc = new int[os.N];
-    }
-
-    private int FO() {
-        fill(tard, 0);
-        for (int i = 0; i < os.M; i++) {
-            for (int j = 0; j < os.N; j++) {
-                int k = current.order[j];
-                A[i][j] = os.p[i][k];
-                if (j > 0)
-                    A[i][j] += A[i][j - 1];
-                if (A[i][j] > os.d[k]) {
-                    int r = A[i][j] - os.d[k];
-                    if (r > tard[j])
-                        tard[j] = r;
-                }
-            }
-        }
-        int s = 0;
-        for (int j = 0; j < os.N; j++) {
-            s += tard[j];
-            tardAcc[j] = s;
-        }
-        return s;
-    }
-
-    private int FO(int a, int b) {
-        fill(tard, 0);
-        for (int i = 0; i < os.M; i++) {
-            int t = (a > 0) ? A[i][a - 1] : 0;
-            for (int j = a; j <= b; j++) {
-                int k = current.order[j];
-                t += os.p[i][k];
-                if (t > os.d[k]) {
-                    int r = t - os.d[k];
-                    if (r > tard[j])
-                        tard[j] = r;
-                }
-            }
-        }
-        int s = 0;
-        for (int j = a; j <= b; j++) {
-            s += tard[j];
-        }
-        int x = tardAcc[b] - ((a > 0) ? tardAcc[a - 1] : 0);
-
-        return FO - x + s;
     }
 
     public int run(Sol sol) {
-        current = sol;
         boolean imp = false;
-        FO = FO();
+        FO = sol.FO();
         do {
             imp = LS1(sol);
-//            if (!imp)
-//                imp = LS2(sol);
-//            if (!imp)
-//                imp = LS3(sol);
+            if (!imp)
+                imp = LS2(sol);
+            if (!imp)
+                imp = LS3(sol);
 //            if (!imp)
 //                imp = LS4(sol);
 //            //...
@@ -152,14 +94,10 @@ public class VND {
         for (int i = 0; i < os.N; i++) {
             for (int j = i + 1; j < os.N; j++) {
                 sol.swap(i, j);
-                int z = FO(i,j);
-//                int d = sol.FO();
-//                if(z!=d)
-//                    System.out.println(z+"  "+d);
-                if (z < FO) {
+                int d = sol.FO();
+                if (d < FO) {
 //                    System.out.println("LS1 "+d);
-
-                    FO = FO();//corrigir isso aqui
+                    FO = d;
                     imp = true;
                     continue;
                 }
