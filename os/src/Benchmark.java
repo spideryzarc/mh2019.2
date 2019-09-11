@@ -27,6 +27,7 @@ public class Benchmark {
             double timeAVG = (double)time/list.length;
             System.out.println(costAVG+"\t"+timeAVG);
             fw.write(costAVG+"\t"+timeAVG+"\t"+s+"\n");
+            fw.flush();
 
         }
         fw.close();

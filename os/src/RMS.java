@@ -1,8 +1,9 @@
 /**Random Multi Start*/
 public class RMS implements Solver {
-    OS os;
-    int ite;
-    Sol best;
+    private OS os;
+    /**número de iterações (restarts)*/
+    private int ite;
+    private Sol best;
     public RMS(int ite){
         this.ite = ite;
     }
@@ -19,23 +20,19 @@ public class RMS implements Solver {
     }
 
     public int run(OS os){
-
         this.os = os;
         best = new Sol(os);
-
         Sol current = new Sol(os);
         int bestFO = best.FO();
         VND vnd = new VND(os);
         for (int i = 0; i < ite; i++) {
             Utils.shuffler(current.order);
-//            int x = current.FO();
             int x = vnd.run(current);
             if(x < bestFO){
                 bestFO = x;
                 best.copy(current);
 //                System.out.println("RMS: "+bestFO);
             }
-
         }
         return bestFO;
     }

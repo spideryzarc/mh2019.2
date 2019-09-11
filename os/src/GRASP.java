@@ -6,10 +6,15 @@ import static java.util.Arrays.fill;
 
 /**Random Multi Start*/
 public class GRASP implements Solver{
-    OS os;
-    int ite;
-    Sol best;
-    int K;
+    private OS os;
+
+    private Sol best;
+
+    /**número de iterações (restarts)*/
+    private int ite;
+    /**número de candidatos por escolha gulosa*/
+    private int K;
+
     public GRASP(int ite, int K){
         this.ite = ite;
         this.K = K;

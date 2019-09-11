@@ -10,13 +10,13 @@ public class Main {
         OS os = new OS("../cos_tardiness_BIG/bt_0.2_0.2_0001");
         System.out.println(os);
 
-        RMS rms = new RMS(30);
-        ILS ils = new ILS(30,10,100);
-        VNS vns = new VNS(30,new int[][]{{10,20,2},
+        RMS rms = new RMS(100);
+        ILS ils = new ILS(100,10,10);
+        VNS vns = new VNS(100,new int[][]{{10,20,2},
                 {20,30,2},
                 {30,40,2},
                 {40,50,20}});
-        GRASP grasp = new GRASP(30,100);
+        GRASP grasp = new GRASP(100,10);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -27,7 +27,7 @@ public class Main {
 //        System.out.println(System.currentTimeMillis()-t);
 
         Solver[] s = new Solver[]{rms,ils,vns,grasp};
-
+//        Solver[] s = new Solver[]{ils};
         Benchmark.run("../b0001/",s,"result.txt");
 
     }

@@ -2,7 +2,7 @@
  * Iterated Local Search
  */
 public class ILS implements Solver {
-    OS os;
+    private OS os;
 
     @Override
     public String toString() {
@@ -29,7 +29,6 @@ public class ILS implements Solver {
     Sol best;
 
     public ILS(int ite, int k, int w) {
-
         this.ite = ite;
         this.K = k;
         this.W = w;
@@ -47,6 +46,7 @@ public class ILS implements Solver {
         Sol current = new Sol(os);
         int bestFO = best.FO();
         System.out.println("ILS: " + bestFO);
+//        VND_old vnd = new VND_old(os);
         VND vnd = new VND(os);
         for (int i = 0; i < ite; i++) {
             perturb(current.order);

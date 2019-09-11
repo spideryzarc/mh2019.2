@@ -10,7 +10,6 @@ public class VNS implements Solver {
      */
     int ite;
 
-
     /**
      * quantidade de pares trocados por perturbação
      */
@@ -35,10 +34,8 @@ public class VNS implements Solver {
     Sol best;
 
     public VNS(int ite, int kwt[][]) {
-
         this.ite = ite;
         this.kwt = kwt;
-
     }
 
     public Sol getSol() {
