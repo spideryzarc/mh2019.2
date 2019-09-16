@@ -8,11 +8,11 @@ public class VND {
     /**
      * valor da função objetivo da solução corrente
      */
-    private int FO;
+    protected int FO;
     /**
      * solução corrente
      */
-    private Sol current;
+    protected Sol current;
     /**
      * A[i][j] - tempo de processamento acumulado na máquina i até a posição j na solução corrente
      */
@@ -37,7 +37,7 @@ public class VND {
      * Calcula a função objetivo da solução corrente e atualiza
      * o vetor tardAcc e a matriz A
      */
-    private int FO_update() {
+    protected int FO_update() {
         fill(tard, 0);
         for (int i = 0; i < os.M; i++) {
             for (int j = 0; j < os.N; j++) {
@@ -66,9 +66,9 @@ public class VND {
      * o vetor tardAcc e a matriz A, considerando alterações entre
      * as posições a e b
      */
-    private int FO_update(int a, int b) {
+    protected int FO_update(int a, int b) {
 
-        fill(tard,a,b+1,0);
+        fill(tard, a, b + 1, 0);
         for (int i = 0; i < os.M; i++) {
             for (int j = a; j <= b; j++) {
                 int k = current.order[j];
@@ -83,12 +83,12 @@ public class VND {
                 }
             }
         }
-        if(a > 0)
+        if (a > 0)
             tard[0] = tardAcc[0];
         for (int j = 1; j < a; j++)
-            tard[j] = tardAcc[j]- tardAcc[j-1];
-        for (int j = b+1; j < os.N; j++)
-            tard[j] = tardAcc[j]- tardAcc[j-1];
+            tard[j] = tardAcc[j] - tardAcc[j - 1];
+        for (int j = b + 1; j < os.N; j++)
+            tard[j] = tardAcc[j] - tardAcc[j - 1];
         int s = 0;
         for (int j = 0; j < os.N; j++) {
             s += tard[j];
@@ -101,8 +101,8 @@ public class VND {
      * Calcula a função objetivo da solução corrente, levando em
      * consideração apenas mundanças ocorridas entre as posições a e b
      */
-    private int FO(int a, int b) {
-        fill(tard, a,b+1,0);
+    int FO(int a, int b) {
+        fill(tard, a, b + 1, 0);
         for (int i = 0; i < os.M; i++) {
             int t = (a > 0) ? A[i][a - 1] : 0;
             for (int j = a; j <= b; j++) {
@@ -143,7 +143,7 @@ public class VND {
     }
 
 
-    private boolean LS2(Sol sol) {
+    boolean LS2(Sol sol) {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = i + 2; j < os.N; j++) {
@@ -152,10 +152,10 @@ public class VND {
                     sol.order[k] = sol.order[k + 1];
                 }
                 sol.order[j] = aux;
-                int d = FO(i,j);
+                int d = FO(i, j);
                 if (d < FO) {
                     //System.out.println("LS2 " + d);
-                    FO = FO_update(i,j);
+                    FO = FO_update(i, j);
                     imp = true;
                     continue;
 //                    return true;
@@ -177,7 +177,7 @@ public class VND {
         return imp;
     }
 
-    private boolean LS3(Sol sol) {
+    boolean LS3(Sol sol) {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = 0; j < i - 1; j++) {
@@ -187,10 +187,10 @@ public class VND {
                 }
                 sol.order[j] = aux;
 
-                int d = FO(j,i);
+                int d = FO(j, i);
                 if (d < FO) {
 //                    System.out.println("LS3 " + d);
-                    FO = FO_update(j,i);
+                    FO = FO_update(j, i);
                     imp = true;
                     continue;
                 }
@@ -207,14 +207,14 @@ public class VND {
         return imp;
     }
 
-    private boolean LS1(Sol sol) {
+    boolean LS1(Sol sol) {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = i + 1; j < os.N; j++) {
                 sol.swap(i, j);
                 int z = FO(i, j);
                 if (z < FO) {
-                    FO = FO_update(i,j);
+                    FO = FO_update(i, j);
 //                    System.out.println(FO+" "+z+" "+current.FO());
 //                    System.out.println("LS1 "+FO+" "+i+" "+j);
                     imp = true;
@@ -227,43 +227,43 @@ public class VND {
         return imp;
     }
 
-    boolean LS4(Sol sol) {
-
-        for (int i = 0; i < os.N; i++) {
-            for (int j = i + 2; j < os.N; j++) {
-                for (int k = j + 1; k < os.N; k++) {
-                    int aux = sol.order[i];
-                    sol.order[i] = sol.order[j];
-                    sol.order[j] = sol.order[k];
-                    sol.order[k] = aux;
-                    int d = FO(i,k);
-                    if (d < FO) {
-                        FO = FO_update(i,k);
-//                        System.out.println("LS4 "+d);
-                        return true;
-                    }
-                    aux = sol.order[k];
-                    sol.order[k] = sol.order[j];
-                    sol.order[j] = sol.order[i];
-                    sol.order[i] = aux;
-
-                    aux = sol.order[k];
-                    sol.order[k] = sol.order[j];
-                    sol.order[j] = sol.order[i];
-                    sol.order[i] = aux;
-                    d = FO(i,k);
-                    if (d < FO) {
-                        FO = FO_update(i,k);
-//                        System.out.println("LS4 "+d);
-                        return true;
-                    }
-                    aux = sol.order[i];
-                    sol.order[i] = sol.order[j];
-                    sol.order[j] = sol.order[k];
-                    sol.order[k] = aux;
-                }
-            }
-        }
-        return false;
-    }
+//    boolean LS4(Sol sol) {
+//
+//        for (int i = 0; i < os.N; i++) {
+//            for (int j = i + 2; j < os.N; j++) {
+//                for (int k = j + 1; k < os.N; k++) {
+//                    int aux = sol.order[i];
+//                    sol.order[i] = sol.order[j];
+//                    sol.order[j] = sol.order[k];
+//                    sol.order[k] = aux;
+//                    int d = FO(i,k);
+//                    if (d < FO) {
+//                        FO = FO_update(i,k);
+////                        System.out.println("LS4 "+d);
+//                        return true;
+//                    }
+//                    aux = sol.order[k];
+//                    sol.order[k] = sol.order[j];
+//                    sol.order[j] = sol.order[i];
+//                    sol.order[i] = aux;
+//
+//                    aux = sol.order[k];
+//                    sol.order[k] = sol.order[j];
+//                    sol.order[j] = sol.order[i];
+//                    sol.order[i] = aux;
+//                    d = FO(i,k);
+//                    if (d < FO) {
+//                        FO = FO_update(i,k);
+////                        System.out.println("LS4 "+d);
+//                        return true;
+//                    }
+//                    aux = sol.order[i];
+//                    sol.order[i] = sol.order[j];
+//                    sol.order[j] = sol.order[k];
+//                    sol.order[k] = aux;
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }

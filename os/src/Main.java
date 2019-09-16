@@ -17,6 +17,8 @@ public class Main {
                 {30,40,2},
                 {40,50,20}});
         GRASP grasp = new GRASP(100,10);
+
+        GLS gls = new GLS(100);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -26,9 +28,9 @@ public class Main {
 //        ils.run(os);
 //        System.out.println(System.currentTimeMillis()-t);
 
-        Solver[] s = new Solver[]{rms,ils,vns,grasp};
-//        Solver[] s = new Solver[]{ils};
-        Benchmark.run("../b0001/",s,"result.txt");
+//        Solver[] s = new Solver[]{rms,ils,vns,grasp};
+        Solver[] s = new Solver[]{gls,ils};
+        Benchmark.run("../0160/",s,"result.txt");
 
     }
 }
