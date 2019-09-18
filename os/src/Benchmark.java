@@ -19,6 +19,7 @@ public class Benchmark {
                 System.out.print("*");
                 OS os = new OS(f.getPath());
                 long t = System.currentTimeMillis();
+                Utils.rd.setSeed(7);
                 cost+= s.run(os);
                 time += System.currentTimeMillis()-t;
             }

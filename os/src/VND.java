@@ -24,7 +24,7 @@ public class VND {
     /**
      * tardAcc[j] - retardo acumulado até a posição j na solução corrente
      */
-    private int tardAcc[];
+    protected int tardAcc[];
 
     public VND(OS os) {
         this.os = os;
@@ -147,6 +147,9 @@ public class VND {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = i + 2; j < os.N; j++) {
+                if(tardAcc[i] == tardAcc[j])
+                    continue; // otimização para não testar trocas inúteis
+
                 int aux = sol.order[i];
                 for (int k = i; k < j; k++) {
                     sol.order[k] = sol.order[k + 1];
@@ -181,6 +184,9 @@ public class VND {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = 0; j < i - 1; j++) {
+                if(tardAcc[i] == tardAcc[j])
+                    continue; // otimização para não testar trocas inúteis
+
                 int aux = sol.order[i];
                 for (int k = i; k > j; k--) {
                     sol.order[k] = sol.order[k - 1];
@@ -211,6 +217,9 @@ public class VND {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = i + 1; j < os.N; j++) {
+                if(tardAcc[i] == tardAcc[j])
+                    continue; // otimização para não testar trocas inúteis
+
                 sol.swap(i, j);
                 int z = FO(i, j);
                 if (z < FO) {

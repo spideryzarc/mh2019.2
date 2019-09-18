@@ -10,6 +10,7 @@ public class GLS implements Solver {
      * matriz de penalidades
      */
     private int P[][];
+    private boolean zeroPenalties;
 
     @Override
     public String toString() {
@@ -43,10 +44,16 @@ public class GLS implements Solver {
         Sol current = new Sol(os);
         bestFO = best.FO();
         System.out.println("GLS: " + bestFO);
-        VND vnd = new VND_P(os);
+
+        VND vnd = new VND(os);
+        vnd.run(current);
+        penalize(current.order);
+
+        vnd = new VND_P(os);
         for (int i = 0; i < ite; i++) {
-            penalize(current.order);
             vnd.run(current);
+            penalize(current.order);
+            System.out.println("ite " + i + " " + current.FO());
         }
         return bestFO;
     }
@@ -56,7 +63,9 @@ public class GLS implements Solver {
      */
     private void penalize(Integer[] order) {
         for (int i = 0; i < os.N; i++)
-            P[order[i]][i]++;
+            if (Utils.rd.nextDouble() < 1)
+                P[order[i]][i]+= 1;
+        zeroPenalties = false;
     }
 
 
@@ -96,8 +105,9 @@ public class GLS implements Solver {
             boolean imp = false;
             for (int i = 0; i < os.N; i++) {
                 for (int j = i + 1; j < os.N; j++) {
+                    if(tardAcc[i] == tardAcc[j] && zeroPenalties)
+                        continue; // otimização para não testar trocas inúteis
                     sol.swap(i, j);
-
                     int foij = FO(i, j);
                     if (foij < bestFO) {
                         updateBest(foij);
@@ -125,6 +135,7 @@ public class GLS implements Solver {
             for (int i = 0; i < os.N; i++) {
                 fill(P[i], 0);
             }
+            zeroPenalties = true;
         }
 
         @Override
@@ -132,6 +143,9 @@ public class GLS implements Solver {
             boolean imp = false;
             for (int i = 0; i < os.N; i++) {
                 for (int j = i + 2; j < os.N; j++) {
+                    if(tardAcc[i] == tardAcc[j] && zeroPenalties)
+                        continue; // otimização para não testar trocas inúteis
+
                     int aux = sol.order[i];
                     for (int k = i; k < j; k++) {
                         sol.order[k] = sol.order[k + 1];
@@ -175,6 +189,9 @@ public class GLS implements Solver {
             boolean imp = false;
             for (int i = 0; i < os.N; i++) {
                 for (int j = 0; j < i - 1; j++) {
+                    if(tardAcc[i] == tardAcc[j] && zeroPenalties)
+                        continue; // otimização para não testar trocas inúteis
+
                     int aux = sol.order[i];
                     for (int k = i; k > j; k--) {
                         sol.order[k] = sol.order[k - 1];
@@ -212,9 +229,7 @@ public class GLS implements Solver {
         private int penalties() {
             int p = 0;
             for (int i = 0; i < os.N; i++)
-                if (Utils.rd.nextBoolean()) {
-                    p += P[current.order[i]][i];
-                }
+                p += P[current.order[i]][i];
             return p;
         }
     }
