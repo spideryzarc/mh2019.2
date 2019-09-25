@@ -24,13 +24,13 @@ public class VND {
     /**
      * tardAcc[j] - retardo acumulado até a posição j na solução corrente
      */
-    protected int tardAcc[];
+    protected Integer tardAcc[];
 
     public VND(OS os) {
         this.os = os;
         A = new int[os.M][os.N];
         tard = new int[os.N];
-        tardAcc = new int[os.N];
+        tardAcc = new Integer[os.N];
     }
 
     /**
@@ -216,7 +216,8 @@ public class VND {
     boolean LS1(Sol sol) {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
-            for (int j = i + 1; j < os.N; j++) {
+            for (int j = os.N - 1; j > i; j--) {
+//                    for (int j = i + 1; j < os.N; j++) {
                 if(tardAcc[i] == tardAcc[j])
                     continue; // otimização para não testar trocas inúteis
 

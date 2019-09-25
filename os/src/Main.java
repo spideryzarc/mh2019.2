@@ -21,6 +21,8 @@ public class Main {
         GLS gls = new GLS(100);
 
         SA sa = new SA(0.2,0.0001,0.0001,100);
+
+        TS ts = new TS(100,100);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -31,8 +33,8 @@ public class Main {
 //        System.out.println(System.currentTimeMillis()-t);
 
 //        Solver[] s = new Solver[]{rms,ils,vns,grasp};
-        Solver[] s = new Solver[]{sa,ils};
-        Benchmark.run("../0160/",s,"result.txt");
+        Solver[] s = new Solver[]{ts,ils};
+        Benchmark.run("../b0001/",s,"result.txt");
 
     }
 }
