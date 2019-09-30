@@ -23,6 +23,8 @@ public class Main {
         SA sa = new SA(0.2,0.0001,0.0001,100);
 
         TS ts = new TS(100,100);
+
+        DEA dea = new DEA(200,500,.1,0.5);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -33,7 +35,7 @@ public class Main {
 //        System.out.println(System.currentTimeMillis()-t);
 
 //        Solver[] s = new Solver[]{rms,ils,vns,grasp};
-        Solver[] s = new Solver[]{ts,ils};
+        Solver[] s = new Solver[]{dea};
         Benchmark.run("../b0001/",s,"result.txt");
 
     }

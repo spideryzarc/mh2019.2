@@ -51,7 +51,6 @@ public class TS implements Solver {
                 bestFO = x;
                 best.copy(current);
                 System.out.println("TS: " + bestFO);
-
                 list.clear();
             }
 
@@ -114,10 +113,10 @@ public class TS implements Solver {
             FO = FO_update();
             do {
                 imp = LS1(sol);
-                if (!imp)
-                    imp = LS2(sol);
-                if (!imp)
-                    imp = LS3(sol);
+//                if (!imp)
+//                    imp = LS2(sol);
+//                if (!imp)
+//                    imp = LS3(sol);
 
             } while (imp);
             return FO;

@@ -42,13 +42,18 @@ public class Sol {
         for (int k = 0; k < os.N; k++) {
             s += tard[k];
         }
-        return s;
+        return fo = s;
     }
+
+    /**última função objetivo calculada*/
+    public int fo;
 
     @Override
     public String toString() {
         return "Sol{" +
-                "order=" + Arrays.toString(order) +
+
+                "fo=" + fo +
+                ", order=" + Arrays.toString(order) +
                 '}';
     }
 
@@ -63,5 +68,6 @@ public class Sol {
             order[i] = src.order[i];
             tard[i] = src.tard[i];
         }
+        fo = src.fo;
     }
 }

@@ -147,7 +147,7 @@ public class VND {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = i + 2; j < os.N; j++) {
-                if(tardAcc[i] == tardAcc[j])
+                if (tardAcc[i] == tardAcc[j])
                     continue; // otimização para não testar trocas inúteis
 
                 int aux = sol.order[i];
@@ -184,7 +184,7 @@ public class VND {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
             for (int j = 0; j < i - 1; j++) {
-                if(tardAcc[i] == tardAcc[j])
+                if (tardAcc[i] == tardAcc[j])
                     continue; // otimização para não testar trocas inúteis
 
                 int aux = sol.order[i];
@@ -216,9 +216,9 @@ public class VND {
     boolean LS1(Sol sol) {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
-            for (int j = os.N - 1; j > i; j--) {
-//                    for (int j = i + 1; j < os.N; j++) {
-                if(tardAcc[i] == tardAcc[j])
+//            for (int j = os.N - 1; j > i; j--) {
+            for (int j = i + 1; j < os.N; j++) {
+                if (tardAcc[i] == tardAcc[j])
                     continue; // otimização para não testar trocas inúteis
 
                 sol.swap(i, j);
