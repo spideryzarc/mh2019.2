@@ -16,14 +16,15 @@ public class Benchmark {
             int time = 0;
             System.out.println(s);
             for (File f : list) {
-                System.out.print("*");
+                System.out.println(f);
+
                 OS os = new OS(f.getPath());
+                System.out.println(os);
                 long t = System.currentTimeMillis();
                 Utils.rd.setSeed(7);
                 cost+= s.run(os);
                 time += System.currentTimeMillis()-t;
             }
-            System.out.println();
             double costAVG = (double)cost/list.length;
             double timeAVG = (double)time/list.length;
             System.out.println(costAVG+"\t"+timeAVG);

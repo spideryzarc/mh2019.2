@@ -1,3 +1,6 @@
+import sun.text.UCompactIntArray;
+
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -6,7 +9,7 @@ import static java.util.Arrays.fill;
 /**
  * Distribution Estimation Algorithm
  **/
-public class DEA implements Solver {
+public class DEA2 implements Solver {
     /**
      * número de iterações
      */
@@ -26,7 +29,7 @@ public class DEA implements Solver {
 
     Sol besSol;
 
-    public DEA(int ite, int popSize, double popElite, double alpha) {
+    public DEA2(int ite, int popSize, double popElite, double alpha) {
         this.ite = ite;
         this.popSize = popSize;
         this.popElite = popElite;
@@ -37,10 +40,11 @@ public class DEA implements Solver {
     @Override
     public int run(OS os) {
         acc = new double[os.N];
+        score = new double[os.N];
 
         /**D[k][j] - prob. do pedido k cair na posição j */
         double D[][] = initDist(os);
-        double E[][] = new double[os.N][os.N];
+        double E[][] = new double[os.N][2];
 
         int eliteSize = (int) Math.round(popSize * popElite);
         PriorityQueue<Sol> elite = new PriorityQueue<>(
@@ -52,19 +56,18 @@ public class DEA implements Solver {
 
         for (int i = 0; i < ite; i++) {
             amostra(elite, eliteSize, popSize, D, os);
-            for(Sol s : elite)
-                if(s.fo < bestFO){
+            for (Sol s : elite)
+                if (s.fo < bestFO) {
                     bestFO = s.fo;
                     besSol.copy(s);
-                    System.out.println("DEA "+bestFO);
+                    System.out.println("DEA " + bestFO);
                 }
 
             distMarginal(E, elite);
 
             for (int j = 0; j < D.length; j++)
-                for (int k = 0; k < D.length; k++)
+                for (int k = 0; k < 2; k++)
                     D[j][k] = D[j][k] * (1 - alpha) + alpha * E[j][k];
-
 
 
         }
@@ -76,16 +79,29 @@ public class DEA implements Solver {
     private void distMarginal(double[][] e, PriorityQueue<Sol> elite) {
         for (int i = 0; i < e.length; i++)
             fill(e[i], 0);
-        double p = 1.0 / elite.size();
-        for (Sol s : elite) {
-            for (int i = 0; i < e.length; i++) {
-                e[s.order[i]][i] += p;
-            }
+
+        for (Sol s : elite)
+            for (int k = 0; k < e.length; k++)
+                e[k][0] += s.compTime[k];
+
+        for (int k = 0; k < e.length; k++)
+            e[k][0] /= elite.size();
+
+
+        for (Sol s : elite)
+            for (int k = 0; k < e.length; k++)
+                e[k][1] += Math.pow(s.compTime[k] - e[k][0], 2);
+
+        for (int k = 0; k < e.length; k++) {
+            e[k][1] = Math.sqrt(e[k][1] / elite.size());
         }
+
     }
 
+    private double score[];
+
     private void amostra(PriorityQueue<Sol> elite, int eliteSize, int popSize, double D[][], OS os) {
-//        elite.clear();
+        elite.clear();
         for (int i = 0; i < popSize; i++) {
             // gerar nova solução
 
@@ -94,15 +110,14 @@ public class DEA implements Solver {
                 sol = elite.remove();
             else sol = new Sol(os);
 
-            fill(sol.order, -1);
+            //amostrar
             for (int k = 0; k < os.N; k++) {
-                int x = roleta(D[k], sol.order);
-                if (sol.order[x] != -1)
-                    System.err.println("EPAAAAAAA roleta deu errado!!!");
-                sol.order[x] = k;
+                score[k] = Utils.rd.nextGaussian() * D[k][1] + D[k][0];
             }
+            Arrays.sort(sol.order, Comparator.comparingDouble(s -> score[s]));
+
             sol.fo = sol.FO();
-            if(!elite.contains(sol))
+            if (!elite.contains(sol))
                 elite.add(sol);
 //            else
 //                System.out.println("opa");
@@ -126,13 +141,12 @@ public class DEA implements Solver {
     }
 
     private double[][] initDist(OS os) {
-        double D[][] = new double[os.N][os.N];
-
+        double D[][] = new double[os.N][2];
+        double m = (double) os.getMaxComp() / 2;
+        double d = (double) os.getMaxComp() / 4;
         for (int k = 0; k < os.N; k++) {
-            double p = 1.0 / os.N;
-            for (int j = 0; j < os.N; j++) {
-                D[k][j] = p;
-            }
+            D[k][0] = m;
+            D[k][1] = d;
         }
         return D;
     }

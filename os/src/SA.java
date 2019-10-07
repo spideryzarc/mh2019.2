@@ -62,6 +62,7 @@ public class SA implements Solver {
 
         double Tini = bestFO * pioramento / Math.log(1 / probInicial);
         double Tfin = bestFO * pioramento / Math.log(1 / probFinal);
+
         System.out.println("Tini " + Tini);
         System.out.println("Tfin " + Tfin);
         int pertPerIte = os.N * os.N / 2;

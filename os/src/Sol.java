@@ -1,8 +1,13 @@
 import java.util.Arrays;
+import java.util.Objects;
 
 import static java.util.Arrays.fill;
 
 public class Sol {
+    /**
+     * tempo de completude do pedido
+     */
+    public int[] compTime;
     OS os;
     /**
      * order[j] o pedido na posição j
@@ -16,6 +21,7 @@ public class Sol {
             order[j] = j;
 
         tard = new int[os.N];
+        compTime = new int[os.N];
 
     }
 
@@ -26,6 +32,7 @@ public class Sol {
      */
     public int FO() {
         fill(tard, 0);
+        fill(compTime, 0);
         for (int i = 0; i < os.M; i++) {
             int t = 0;
             for (int j = 0; j < os.N; j++) {
@@ -36,6 +43,9 @@ public class Sol {
                     if (r > tard[k])
                         tard[k] = r;
                 }
+
+                if (compTime[k] < t)
+                    compTime[k] = t;
             }
         }
         int s = 0;
@@ -45,7 +55,9 @@ public class Sol {
         return fo = s;
     }
 
-    /**última função objetivo calculada*/
+    /**
+     * última função objetivo calculada
+     */
     public int fo;
 
     @Override
@@ -69,5 +81,22 @@ public class Sol {
             tard[i] = src.tard[i];
         }
         fo = src.fo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sol sol = (Sol) o;
+        return fo == sol.fo;
+//        &&
+//                Arrays.equals(order, sol.order);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(fo);
+        result = 31 * result + Arrays.hashCode(order);
+        return result;
     }
 }

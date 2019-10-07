@@ -7,24 +7,25 @@ public class Main {
 
 //        OS os = new OS("../instance_small/t_0.2_0.2_0001");
 //        OS os = new OS("../instance_small/t_0.8_0.8_0300");
-        OS os = new OS("../cos_tardiness_BIG/bt_0.2_0.2_0001");
-        System.out.println(os);
+        //OS os = new OS("../cos_tardiness_BIG/bt_0.2_0.2_0001");
+        //System.out.println(os);
 
-        RMS rms = new RMS(100);
-        ILS ils = new ILS(100,10,10);
-        VNS vns = new VNS(100,new int[][]{{10,20,2},
+        RMS rms = new RMS(10);
+        ILS ils = new ILS(10,30,50);
+        VNS vns = new VNS(10,new int[][]{{10,20,2},
                 {20,30,2},
                 {30,40,2},
                 {40,50,20}});
-        GRASP grasp = new GRASP(100,10);
+        GRASP grasp = new GRASP(10,10);
 
-        GLS gls = new GLS(100);
+        GLS gls = new GLS(10);
 
-        SA sa = new SA(0.2,0.0001,0.0001,100);
+        SA sa = new SA(0.2,0.0001,0.0001,30);
 
-        TS ts = new TS(100,100);
+        TS ts = new TS(10,30);
 
-        DEA dea = new DEA(200,500,.1,0.5);
+        DEA dea = new DEA(1000,1000,.1,0.3);
+        DEA2 dea2= new DEA2(1000,1000,.3,0.3);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -35,8 +36,8 @@ public class Main {
 //        System.out.println(System.currentTimeMillis()-t);
 
 //        Solver[] s = new Solver[]{rms,ils,vns,grasp};
-        Solver[] s = new Solver[]{dea};
-        Benchmark.run("../b0001/",s,"result.txt");
+        Solver[] s = new Solver[]{dea2};
+        Benchmark.run("../0160/",s,"result.txt");
 
     }
 }
