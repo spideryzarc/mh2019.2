@@ -1,4 +1,3 @@
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class Main {
@@ -11,21 +10,22 @@ public class Main {
         //System.out.println(os);
 
         RMS rms = new RMS(10);
-        ILS ils = new ILS(10,30,50);
-        VNS vns = new VNS(10,new int[][]{{10,20,2},
-                {20,30,2},
-                {30,40,2},
-                {40,50,20}});
-        GRASP grasp = new GRASP(10,10);
+        ILS ils = new ILS(10, 30, 50);
+        VNS vns = new VNS(10, new int[][]{{10, 20, 2},
+                {20, 30, 2},
+                {30, 40, 2},
+                {40, 50, 20}});
+        GRASP grasp = new GRASP(10, 10);
 
         GLS gls = new GLS(10);
 
-        SA sa = new SA(0.2,0.0001,0.0001,30);
+        SA sa = new SA(0.2, 0.0001, 0.0001, 30);
 
-        TS ts = new TS(10,30);
+        TS ts = new TS(10, 30);
 
-        DEA dea = new DEA(1000,1000,.1,0.3);
-        DEA2 dea2= new DEA2(1000,1000,.3,0.3);
+        DEA dea = new DEA(1000, 1000, .1, 0.3);
+        DEA2 dea2 = new DEA2(1000, 400, .2, 0.1);
+        GA ga = new GA(1000, 1000, 300, .1, .1);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -36,8 +36,8 @@ public class Main {
 //        System.out.println(System.currentTimeMillis()-t);
 
 //        Solver[] s = new Solver[]{rms,ils,vns,grasp};
-        Solver[] s = new Solver[]{dea2};
-        Benchmark.run("../0160/",s,"result.txt");
+        Solver[] s = new Solver[]{ga};
+        Benchmark.run("../0160/", s, "result.txt");
 
     }
 }

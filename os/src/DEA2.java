@@ -101,7 +101,8 @@ public class DEA2 implements Solver {
     private double score[];
 
     private void amostra(PriorityQueue<Sol> elite, int eliteSize, int popSize, double D[][], OS os) {
-        elite.clear();
+//        elite.clear();
+
         for (int i = 0; i < popSize; i++) {
             // gerar nova solução
 
@@ -116,7 +117,11 @@ public class DEA2 implements Solver {
             }
             Arrays.sort(sol.order, Comparator.comparingDouble(s -> score[s]));
 
+
+
             sol.fo = sol.FO();
+            //System.out.println(sol.fo);
+
             if (!elite.contains(sol))
                 elite.add(sol);
 //            else
@@ -143,7 +148,7 @@ public class DEA2 implements Solver {
     private double[][] initDist(OS os) {
         double D[][] = new double[os.N][2];
         double m = (double) os.getMaxComp() / 2;
-        double d = (double) os.getMaxComp() / 4;
+        double d = (double) os.getMaxComp() / 10;
         for (int k = 0; k < os.N; k++) {
             D[k][0] = m;
             D[k][1] = d;

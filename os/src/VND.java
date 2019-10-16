@@ -134,8 +134,8 @@ public class VND {
                 imp = LS2(sol);
             if (!imp)
                 imp = LS3(sol);
-//            if (!imp)
-//                imp = LS4(sol);
+            if (!imp)
+                imp = LS4(sol);
 //            //...
 //            System.out.println(FO);
         } while (imp);
@@ -237,43 +237,49 @@ public class VND {
         return imp;
     }
 
-//    boolean LS4(Sol sol) {
-//
-//        for (int i = 0; i < os.N; i++) {
-//            for (int j = i + 2; j < os.N; j++) {
-//                for (int k = j + 1; k < os.N; k++) {
-//                    int aux = sol.order[i];
-//                    sol.order[i] = sol.order[j];
-//                    sol.order[j] = sol.order[k];
-//                    sol.order[k] = aux;
-//                    int d = FO(i,k);
-//                    if (d < FO) {
-//                        FO = FO_update(i,k);
-////                        System.out.println("LS4 "+d);
-//                        return true;
-//                    }
-//                    aux = sol.order[k];
-//                    sol.order[k] = sol.order[j];
-//                    sol.order[j] = sol.order[i];
-//                    sol.order[i] = aux;
-//
-//                    aux = sol.order[k];
-//                    sol.order[k] = sol.order[j];
-//                    sol.order[j] = sol.order[i];
-//                    sol.order[i] = aux;
-//                    d = FO(i,k);
-//                    if (d < FO) {
-//                        FO = FO_update(i,k);
-////                        System.out.println("LS4 "+d);
-//                        return true;
-//                    }
-//                    aux = sol.order[i];
-//                    sol.order[i] = sol.order[j];
-//                    sol.order[j] = sol.order[k];
-//                    sol.order[k] = aux;
-//                }
-//            }
-//        }
-//        return false;
-//    }
+    boolean LS4(Sol sol) {
+
+        for (int i = 0; i < os.N; i++) {
+            if (tardAcc[i] == 0)
+                continue; // otimização para não testar trocas inúteis
+            for (int j = i + 1; j < os.N; j++) {
+                if (tardAcc[i] == tardAcc[j])
+                    continue; // otimização para não testar trocas inúteis
+                for (int k = j + 1; k < os.N; k++) {
+                    if (tardAcc[j] == tardAcc[k])
+                        continue; // otimização para não testar trocas inúteis
+                    int aux = sol.order[i];
+                    sol.order[i] = sol.order[j];
+                    sol.order[j] = sol.order[k];
+                    sol.order[k] = aux;
+                    int d = FO(i,k);
+                    if (d < FO) {
+                        FO = FO_update(i,k);
+                        System.out.println("LS4 "+d);
+                        return true;
+                    }
+                    aux = sol.order[k];
+                    sol.order[k] = sol.order[j];
+                    sol.order[j] = sol.order[i];
+                    sol.order[i] = aux;
+
+                    aux = sol.order[k];
+                    sol.order[k] = sol.order[j];
+                    sol.order[j] = sol.order[i];
+                    sol.order[i] = aux;
+                    d = FO(i,k);
+                    if (d < FO) {
+                        FO = FO_update(i,k);
+                        System.out.println("LS4 "+d);
+                        return true;
+                    }
+                    aux = sol.order[i];
+                    sol.order[i] = sol.order[j];
+                    sol.order[j] = sol.order[k];
+                    sol.order[k] = aux;
+                }
+            }
+        }
+        return false;
+    }
 }
