@@ -31,6 +31,8 @@ public class GRASP implements Solver{
         best = new Sol(os);
 
         Sol current = new Sol(os);
+        randomGreedy1(current);
+        best.copy(current);
         int bestFO = best.FO();
         VND vnd = new VND(os);
         for (int i = 0; i < ite; i++) {
@@ -86,6 +88,7 @@ public class GRASP implements Solver{
 
     private int A[], fval[];
     private void randomGreedy1(Sol current) {
+        os = current.os;
         vet.clear();
         for (int i = 0; i < os.N; i++)
             vet.add(i);
