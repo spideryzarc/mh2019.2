@@ -130,12 +130,12 @@ public class VND {
         FO = FO_update();
         do {
             imp = LS1(sol);
-            if (!imp)
-                imp = LS2(sol);
-            if (!imp)
-                imp = LS3(sol);
-            if (!imp)
-                imp = LS4(sol);
+//            if (!imp)
+//                imp = LS2(sol);
+//            if (!imp)
+//                imp = LS3(sol);
+//            if (!imp)
+//                imp = LS4(sol);
 //            //...
 //            System.out.println(FO);
         } while (imp);

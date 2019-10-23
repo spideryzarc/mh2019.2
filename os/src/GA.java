@@ -219,11 +219,11 @@ public class GA implements Solver {
         Sol son = newSol();
         for (int k = 0; k < os.N; k++) {
             if (Utils.rd.nextBoolean())
-                son.compTime[k] = p1.compTime[k];
+                son.startTime[k] = p1.startTime[k];
             else
-                son.compTime[k] = p2.compTime[k];
+                son.startTime[k] = p2.startTime[k];
         }
-        Arrays.sort(son.order, Comparator.comparingInt(s -> son.compTime[s]));
+        Arrays.sort(son.order, Comparator.comparingInt(s -> son.startTime[s]));
 
         son.FO();
         return son;

@@ -1,5 +1,3 @@
-import sun.text.UCompactIntArray;
-
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -82,7 +80,7 @@ public class DEA2 implements Solver {
 
         for (Sol s : elite)
             for (int k = 0; k < e.length; k++)
-                e[k][0] += s.compTime[k];
+                e[k][0] += s.startTime[k];
 
         for (int k = 0; k < e.length; k++)
             e[k][0] /= elite.size();
@@ -90,7 +88,7 @@ public class DEA2 implements Solver {
 
         for (Sol s : elite)
             for (int k = 0; k < e.length; k++)
-                e[k][1] += Math.pow(s.compTime[k] - e[k][0], 2);
+                e[k][1] += Math.pow(s.startTime[k] - e[k][0], 2);
 
         for (int k = 0; k < e.length; k++) {
             e[k][1] = Math.sqrt(e[k][1] / elite.size());

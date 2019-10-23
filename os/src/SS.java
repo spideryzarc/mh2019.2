@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * scatter search
@@ -8,9 +10,11 @@ public class SS implements Solver {
     int ite;
     int popIniSize;
     int eliteSize;
+    double step = 0.005;
 
     Sol best;
     OS os;
+
 
     public SS(int ite, int popIniSize, int eliteSize) {
         this.ite = ite;
@@ -22,12 +26,109 @@ public class SS implements Solver {
     @Override
     public int run(OS os) {
         this.os = os;
+        score = new double[os.N];
         ArrayList<Sol> pop = new ArrayList<>();
         init(pop);
         ArrayList<Sol> elite = new ArrayList<>();
         selectElite(pop, elite);
 
+        VND vnd = new VND(os);
+        for (Sol s : elite) {
+            // vnd.run(s);
+            System.out.println(s.fo);
+        }
+
+
+        best = elite.get(0);
+        System.out.println("SS " + best.fo);
+
+        int worstIdx = 0;
+        int max = elite.get(0).fo;
+        for (int i = 1; i < elite.size(); i++) {
+            if (elite.get(i).fo > max) {
+                max = elite.get(i).fo;
+                worstIdx = i;
+            }
+            if (best.fo > elite.get(i).fo) {
+                best.copy(elite.get(i));
+                System.out.println("SS elite " + best.fo);
+            }
+        }
+
+        boolean imp;
+        do {
+            imp = false;
+            for (int i = 0, len = elite.size(); i < len; i++) {
+                for (int j = 0; j < len; j++)
+                    if (i != j) {
+//                        for (int z = 0; z < 1000; z++)
+                        {
+                            Sol x = pathRelinking(elite.get(i), elite.get(j), vnd);
+                            //vnd.run(x);
+                            if (best.fo > x.fo) {
+                                best.copy(x);
+                                System.out.println("SS " + x.fo);
+                            }
+                            if (!elite.contains(x) && x.fo < max) {
+                                elite.set(worstIdx, x);
+                                worstIdx = 0;
+                                max = elite.get(0).fo;
+                                for (int k = 1; k < elite.size(); k++)
+                                    if (elite.get(k).fo > max) {
+                                        max = elite.get(k).fo;
+                                        worstIdx = k;
+                                    }
+                                imp = true;
+                                break;
+                            }
+                        }
+                    }
+            }
+        } while (imp);
+
         return 0;
+    }
+
+    private double score[];
+
+    private Sol pathRelinking(Sol s1, Sol s2, VND vnd) {
+        Sol curr = new Sol(os);
+        Sol best = new Sol(os);
+        best.fo = Integer.MAX_VALUE;
+        for (double alpha = step; alpha < 1; alpha += step) {
+            for (int i = 0; i < score.length; i++) {
+                score[i] = s1.startTime[i] * alpha + (1 - alpha) * s2.startTime[i];
+            }
+            Arrays.sort(curr.order, Comparator.comparingDouble(s -> score[s]));
+
+            curr.FO();
+            if (curr.fo < s1.fo || curr.fo < s2.fo){
+                vnd.run(curr);
+                System.out.println(curr.fo);
+            }
+//            curr.FO();
+            if (curr.fo < best.fo) {
+                best.copy(curr);
+                if (best.fo < s1.fo && best.fo < s2.fo)
+                    return best;
+            }
+        }
+        return best;
+    }
+
+    private Sol randomXCT(Sol p1, Sol p2) {
+        Sol son = new Sol(os);
+        for (int k = 0; k < os.N; k++) {
+            if (Utils.rd.nextBoolean())
+                son.startTime[k] = p1.startTime[k];
+            else
+                son.startTime[k] = p2.startTime[k];
+        }
+        Arrays.sort(son.order, Comparator.comparingInt(s -> son.startTime[s]));
+
+        son.FO();
+        return son;
+
     }
 
     private void selectElite(ArrayList<Sol> pop, ArrayList<Sol> elite) {
@@ -71,14 +172,14 @@ public class SS implements Solver {
     private double dist(Sol sol, Sol sol1) {
         double s = 0;
         for (int i = 0; i < os.N; i++) {
-            double d = sol1.compTime[i] - sol.compTime[i];
+            double d = sol1.startTime[i] - sol.startTime[i];
             s += d * d;
         }
         return Math.sqrt(s);
     }
 
     private void init(ArrayList<Sol> pop) {
-        GRASP grasp = new GRASP(0, os.N / 10);
+        GRASP grasp = new GRASP(0, 1 + os.N / 300);
         for (int i = 0; i < popIniSize; i++) {
             grasp.run(os);
             pop.add(grasp.getSol());
@@ -87,6 +188,6 @@ public class SS implements Solver {
 
     @Override
     public Sol getSol() {
-        return null;
+        return best;
     }
 }

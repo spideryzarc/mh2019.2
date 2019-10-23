@@ -7,7 +7,7 @@ public class Sol {
     /**
      * tempo de completude do pedido
      */
-    public int[] compTime;
+    public int[] startTime;
     OS os;
     /**
      * order[j] o pedido na posição j
@@ -21,7 +21,7 @@ public class Sol {
             order[j] = j;
 
         tard = new int[os.N];
-        compTime = new int[os.N];
+        startTime = new int[os.N];
 
     }
 
@@ -32,11 +32,15 @@ public class Sol {
      */
     public int FO() {
         fill(tard, 0);
-        fill(compTime, 0);
+        fill(startTime, 0);
         for (int i = 0; i < os.M; i++) {
             int t = 0;
             for (int j = 0; j < os.N; j++) {
                 int k = order[j];
+
+                if (startTime[k] < t)
+                    startTime[k] = t;
+
                 t += os.p[i][k];
                 if (t > os.d[k]) {
                     int r = t - os.d[k];
@@ -44,8 +48,7 @@ public class Sol {
                         tard[k] = r;
                 }
 
-                if (compTime[k] < t)
-                    compTime[k] = t;
+
             }
         }
         int s = 0;
