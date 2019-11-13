@@ -9,7 +9,7 @@ public class Benchmark {
         File dir = new File(path);
         File[] list = dir.listFiles();
 
-        FileWriter fw = new FileWriter(new File(outpath));
+        FileWriter fw = new FileWriter(new File(outpath),true);
 
         for(Solver s : solver) {
             int cost = 0;

@@ -63,8 +63,9 @@ public class SS implements Solver {
                     if (i != j) {
 //                        for (int z = 0; z < 1000; z++)
                         {
-                            Sol x = pathRelinking(elite.get(i), elite.get(j), vnd);
-                            //vnd.run(x);
+                            //Sol x = pathRelinking(elite.get(i), elite.get(j), vnd);
+                            Sol x = randomXCT(elite.get(i), elite.get(j));
+                            vnd.run(x);
                             if (best.fo > x.fo) {
                                 best.copy(x);
                                 System.out.println("SS " + x.fo);

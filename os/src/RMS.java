@@ -31,7 +31,7 @@ public class RMS implements Solver {
             if(x < bestFO){
                 bestFO = x;
                 best.copy(current);
-//                System.out.println("RMS: "+bestFO);
+                System.out.println("RMS: "+bestFO);
             }
         }
         return bestFO;

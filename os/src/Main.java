@@ -24,10 +24,10 @@ public class Main {
         TS ts = new TS(10, 30);
 
         DEA dea = new DEA(1000, 1000, .1, 0.3);
-        DEA2 dea2 = new DEA2(1000, 400, .2, 0.1);
-        GA ga = new GA(1000, 1000, 500, 1, .05);
+        DEA2 dea2 = new DEA2(500, 400, .2, 0.1);
+        GA ga = new GA(200, 1000, 500, 1, .05);
 
-        SS ss = new SS(100,1000,20);
+        SS ss = new SS(100, 1000, 20);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -37,9 +37,11 @@ public class Main {
 //        ils.run(os);
 //        System.out.println(System.currentTimeMillis()-t);
 
-//        Solver[] s = new Solver[]{rms,ils,vns,grasp};
-        Solver[] s = new Solver[]{ss};
+        Solver[] s = new Solver[]{rms};
+//        Solver[] s = new Solver[]{rms, ils, vns, grasp, gls, sa, ts, dea2, ga, ss};
         Benchmark.run("../0160/", s, "result.txt");
+//          Benchmark.run("../0001/", s, "result.txt");
+//        Benchmark.run("../benchmark/", s, "result.txt");
 
     }
 }
