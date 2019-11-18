@@ -90,25 +90,29 @@ public class GA implements Solver {
 //                    if(!parents.contains(f) && !pop.contains(f))
 //                        parents.add(f);
 
-//                    f = randomX(parents.get(i), parents.get(j),.05);
+                    f = randomX(parents.get(i), parents.get(j),.5);
+                    if(!parents.contains(f) && !pop.contains(f))
+                        parents.add(f);
+
+//                    f = randomX(parents.get(j), parents.get(i),.5);
 //                    if(!parents.contains(f) && !pop.contains(f))
 //                        parents.add(f);
 
-                    f = randomXCT(parents.get(i), parents.get(j));
-                    if (!parents.contains(f) && !pop.contains(f))
-                        parents.add(f);
+//                    f = randomXCT(parents.get(i), parents.get(j));
+//                    if (!parents.contains(f) && !pop.contains(f))
+//                        parents.add(f);
 
 
                 }
             }
 
             parents.addAll(pop);
-            Collections.sort(pop, Comparator.comparingInt(a -> a.fo));
+            Collections.sort(parents, Comparator.comparingInt(a -> a.fo));
 
             if (parents.get(0).fo < bestCost) {
                 bestCost = parents.get(0).fo;
                 best.copy(parents.get(0));
-                System.out.println("GA " + bestCost);
+                System.out.println(k+" GA " + bestCost);
             }
             pop.clear();
             pop.addAll(parents.subList(0, popSize));
@@ -190,7 +194,7 @@ public class GA implements Solver {
     }
 
     private Sol randomX(Sol p1, Sol p2, double x) {
-        Sol son = new Sol(os);
+        Sol son = newSol();
         fill(in, false);
         fill(son.order, -1);
         int len = os.N;
@@ -265,10 +269,13 @@ public class GA implements Solver {
 
     private void initPop(ArrayList<Sol> pop) {
         pop.clear();
+        VND vd = new VND(os);
         for (int i = 0; i < popSize; i++) {
             Sol s = new Sol(os);
             Utils.shuffler(s.order);
+            vd.runLS1(s);
             s.FO();
+            System.out.println(i+" init GA "+s.fo);
             pop.add(s);
         }
     }

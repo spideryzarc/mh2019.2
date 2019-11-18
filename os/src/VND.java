@@ -162,9 +162,9 @@ public class VND {
         current = sol;
         boolean imp = false;
         FO = FO_update();
-        do {
+//        do {
             imp = LS1(sol);
-        } while (imp);
+//        } while (imp);
         return sol.FO();
     }
 
@@ -247,12 +247,12 @@ public class VND {
                 if (tardAcc[i] == tardAcc[j])
                     continue; // otimização para não testar trocas inúteis
 
-                if (j > i + 100
-                        && tardAcc[j - 1] - tardAcc[i] < deltaSwap(i, j)) {
-                    System.out.println("opa");
-                    continue;
-
-                }
+                //otimização que não valeu a pena
+//                if (tardAcc[j - 1] - tardAcc[i] < deltaSwap(i, j)){
+//                   // System.out.println("opa "+i+" "+j);
+//                    continue;
+//
+//                }
 
 
                 sol.swap(i, j);
@@ -275,18 +275,14 @@ public class VND {
      * variação do custo da troca de i por j , desconsiderando o que ocorre
      * entre i e j, para i > j
      */
-    private int deltaSwap(int i, int j) {
-        final int pedidoEmI = current.order[i];
-        final int pedidoEmJ = current.order[j];
-        int tardi = 0;
-        if (i > 0)
-            tardi = tardAcc[i] - tardAcc[i - 1]; // tard do pedido na posição i
-        else
-            tardi = tardAcc[i]; // tard do pedido na posição i
+    private final int deltaSwap(int i, int j) {
+        int pedidoEmI = current.order[i];
+        int pedidoEmJ = current.order[j];
+        int tardi = (i > 0) ? tardAcc[i] - tardAcc[i - 1] : tardAcc[i]; // tard do pedido na posição i
         int novoTardi = (compTime[pedidoEmJ] > os.d[pedidoEmI]) ? compTime[pedidoEmJ] - os.d[pedidoEmI] : 0;
-
         int tardj = tardAcc[j] - tardAcc[j - 1]; // tard do pedido na posição i
-        int novoTardj = 0; // valor mínimo, pode ser calculado com maior precisão em O(M)
+        int compTimeIm1 = (i > 0) ? compTime[current.order[i - 1]] : 0;
+        int novoTardj = (compTimeIm1+os.minP[pedidoEmJ] > os.d[pedidoEmJ]) ? compTimeIm1+os.minP[pedidoEmJ] - os.d[pedidoEmJ] : 0; // valor mínimo, pode ser calculado com maior precisão em O(M)
 
         return novoTardi - tardi + novoTardj - tardj;
 

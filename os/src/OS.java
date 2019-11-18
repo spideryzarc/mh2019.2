@@ -32,17 +32,30 @@ public class OS {
      */
     int d[];
 
+
+    int maxP[], minP[];
+
+
     public OS(String path) throws FileNotFoundException {
         Scanner sc = new Scanner(new File(path));
         M = sc.nextInt();
         N = sc.nextInt();
         p = new int[M][N];
         d = new int[N];
+        maxP = new int[N];
+        minP = new int[N];
 
         for (int k = 0; k < N; k++) {
+            maxP[k] = 0;
+            minP[k] = Integer.MAX_VALUE;
             for (int i = 0; i < M; i++) {
                 p[i][k] = sc.nextInt();
-
+                if (minP[k] > p[i][k]) {
+                    minP[k] = p[i][k];
+                }
+                if (maxP[k] < p[i][k]) {
+                    maxP[k] = p[i][k];
+                }
             }
             d[k] = sc.nextInt();
         }
