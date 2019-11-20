@@ -79,11 +79,11 @@ public class GRASP implements Solver{
                 max = A[i]+os.p[i][k];
             }
         }
-//        return os.d[k] -  max;
+        return os.d[k] -  max;
 //        return os.d[k]+  max;
 //        return Math.max(os.d[k],  max);
 //        return os.d[k] +  max;
-        return Math.max(os.d[k], max);
+//        return Math.max(os.d[k], max);
     }
 
     private int A[], fval[];

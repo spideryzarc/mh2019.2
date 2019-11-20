@@ -42,11 +42,8 @@ public class ILS implements Solver {
     public int run(OS os) {
         this.os = os;
         best = new Sol(os);
-
         Sol current = new Sol(os);
-        int bestFO = best.FO();
-        System.out.println("ILS: " + bestFO);
-//        VND_old vnd = new VND_old(os);
+        int bestFO = Integer.MAX_VALUE;
         VND vnd = new VND(os);
         for (int i = 0; i < ite; i++) {
             perturb(current.order);
@@ -54,14 +51,14 @@ public class ILS implements Solver {
             if (x < bestFO) {
                 bestFO = x;
                 best.copy(current);
-                System.out.println("ILS: " + bestFO);
+                System.out.println(i+" ILS: " + bestFO);
             }
 
         }
         return bestFO;
     }
 
-    private void perturb(Integer[] order) {
+    private final void perturb(Integer[] order) {
         for (int i = 0; i < K; i++) {
             int x = Utils.rd.nextInt(os.N);
             int y = x + Utils.rd.nextInt(2 * W) - W;

@@ -72,7 +72,7 @@ public class Sol {
                 '}';
     }
 
-    public void swap(int i, int j) {
+    public final void swap(int i, int j) {
         int aux = order[i];
         order[i] = order[j];
         order[j] = aux;

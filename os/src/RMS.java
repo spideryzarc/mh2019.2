@@ -23,7 +23,7 @@ public class RMS implements Solver {
         this.os = os;
         best = new Sol(os);
         Sol current = new Sol(os);
-        int bestFO = best.FO();
+        int bestFO = Integer.MAX_VALUE;
         VND vnd = new VND(os);
         for (int i = 0; i < ite; i++) {
             Utils.shuffler(current.order);
@@ -31,7 +31,7 @@ public class RMS implements Solver {
             if(x < bestFO){
                 bestFO = x;
                 best.copy(current);
-                System.out.println("RMS: "+bestFO);
+                System.out.println(i+" RMS: "+bestFO);
             }
         }
         return bestFO;

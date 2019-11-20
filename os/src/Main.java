@@ -9,13 +9,13 @@ public class Main {
         //OS os = new OS("../cos_tardiness_BIG/bt_0.2_0.2_0001");
         //System.out.println(os);
 
-        RMS rms = new RMS(10);
-        ILS ils = new ILS(10, 30, 50);
-        VNS vns = new VNS(10, new int[][]{{10, 20, 2},
-                {20, 30, 2},
-                {30, 40, 2},
-                {40, 50, 20}});
-        GRASP grasp = new GRASP(10, 10);
+        RMS rms = new RMS(60);
+        ILS ils = new ILS(60, 60, 10);
+        VNS vns = new VNS(60, new int[][]{{60, 10, 5},
+                {50, 20, 5},
+                {40, 30, 5},
+                {30, 40, 20}});
+        GRASP grasp = new GRASP(60, 20);
 
         GLS gls = new GLS(10);
 
@@ -37,11 +37,11 @@ public class Main {
 //        ils.run(os);
 //        System.out.println(System.currentTimeMillis()-t);
 
-        Solver[] s = new Solver[]{ga};
+        Solver[] s = new Solver[]{ils};
 //        Solver[] s = new Solver[]{rms, ils, vns, grasp, gls, sa, ts, dea2, ga, ss};
-        Benchmark.run("../0160/", s, "result.txt");
+//        Benchmark.run("../0160/", s, "result.txt");
 //          Benchmark.run("../0001/", s, "result.txt");
-//        Benchmark.run("../benchmark/", s, "result.txt");
+        Benchmark.run("../benchmark/", s, "result.txt");
 
     }
 }

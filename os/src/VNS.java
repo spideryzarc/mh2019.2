@@ -47,8 +47,7 @@ public class VNS implements Solver {
         this.os = os;
 
         Sol current = new Sol(os);
-        int bestFO = best.FO();
-        System.out.println("VNS: " + bestFO);
+        int bestFO = Integer.MAX_VALUE;
         VND vnd = new VND(os);
         int v = 0;
         K = kwt[v][0];
@@ -69,13 +68,11 @@ public class VNS implements Solver {
             if (x < bestFO) {
                 bestFO = x;
                 best.copy(current);
-                System.out.println("VNS: "+v+ " - " + bestFO);
+                System.out.println(i+ " VNS: "+v+ " - " + bestFO);
                 v = 0;
                 K = kwt[v][0];
                 W = kwt[v][1];
                 tries = kwt[v][2];
-            }else{
-                current.copy(best);
             }
 
         }

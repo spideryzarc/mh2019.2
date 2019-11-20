@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Comparator;
+
 import static java.util.Arrays.fill;
 
 /**
@@ -31,12 +34,25 @@ public class VND {
      */
     protected Integer compTime[];
 
+
+    private Integer[] macIdx;
+    private int[] score;
+
     public VND(OS os) {
         this.os = os;
         A = new int[os.M][os.N];
         tard = new int[os.N];
         tardAcc = new Integer[os.N];
         compTime = new Integer[os.N];
+
+
+        score = new int[os.M];
+        macIdx = new Integer[os.M];
+        for (int i = 0; i < os.M; i++) {
+            macIdx[i] = i;
+        }
+
+
     }
 
     /**
@@ -55,8 +71,9 @@ public class VND {
                 A[i][j] = tmp;
                 if (tmp > os.d[k]) {
                     int r = tmp - os.d[k];
-                    if (r > tard[j])
+                    if (r > tard[j]) {
                         tard[j] = r;
+                    }
                 }
                 if (compTime[k] < tmp) {
                     compTime[k] = tmp;
@@ -68,7 +85,25 @@ public class VND {
             s += tard[j];
             tardAcc[j] = s;
         }
+
+
+
         return FO = s;
+    }
+
+    private void sortMachines() {
+        fill(score, 0);
+        for (int j = 0; j < os.N; j++) {
+            int max = A[0][j], maxi = 0;
+            for (int i = 1; i < os.M; i++) {
+                if (max < A[i][j]) {
+                    max = A[i][j];
+                    maxi = i;
+                }
+            }
+            score[maxi]++;
+        }
+        Arrays.sort(macIdx, Comparator.comparingInt(x->-score[x]));
     }
 
     /**
@@ -113,47 +148,78 @@ public class VND {
         return FO = s;
     }
 
+
     /**
-     * Calcula a função objetivo da solução corrente, levando em
-     * consideração apenas mundanças ocorridas entre as posições a e b
+     * Calcula um limite inferior para a função objetivo da solução corrente,
+     * levando em consideração apenas mundanças ocorridas entre as posições a e b
      */
-    int FO(int a, int b) {
+    final int FO(int a, int b) {
+        int x = tardAcc[b] - ((a > 0) ? tardAcc[a - 1] : 0);
+        int s = 0;
         fill(tard, a, b + 1, 0);
-        for (int i = 0; i < os.M; i++) {
+        for (int i : macIdx) {
             int t = (a > 0) ? A[i][a - 1] : 0;
             for (int j = a; j <= b; j++) {
                 int k = current.order[j];
                 t += os.p[i][k];
                 if (t > os.d[k]) {
                     int r = t - os.d[k];
-                    if (r > tard[j])
+                    if (r > tard[j]) {
+                        s += r - tard[j];
                         tard[j] = r;
+                        if (s > x) {
+                            //System.out.println("m "+i);
+                            return FO - x + s;
+                        }
+                    }
                 }
             }
         }
-        int s = 0;
-        for (int j = a; j <= b; j++) {
-            s += tard[j];
-        }
-        int x = tardAcc[b] - ((a > 0) ? tardAcc[a - 1] : 0);
+
+//        for (int j = a; j <= b; j++) {
+//            s += tard[j];
+//        }
+
 
         return FO - x + s;
     }
+
+//    final int FO(int a, int b) {
+//        int x = tardAcc[b] - ((a > 0) ? tardAcc[a - 1] : 0);
+//        fill(tard, a, b + 1, 0);
+//        for (int i = 0; i < os.M; i++) {
+//            int t = (a > 0) ? A[i][a - 1] : 0;
+//            for (int j = a; j <= b; j++) {
+//                int k = current.order[j];
+//                t += os.p[i][k];
+//                if (t > os.d[k]) {
+//                    int r = t - os.d[k];
+//                    if (r > tard[j])
+//                        tard[j] = r;
+//                }
+//            }
+//        }
+//        int s = 0;
+//        for (int j = a; j <= b; j++) {
+//            s += tard[j];
+//        }
+//
+//
+//        return FO - x + s;
+//    }
 
     public int run(Sol sol) {
         current = sol;
         boolean imp = false;
         FO = FO_update();
         do {
+            sortMachines();
+
             imp = LS1(sol);
             if (!imp)
                 imp = LS2(sol);
             if (!imp)
                 imp = LS3(sol);
-//            if (!imp)
-//                imp = LS4(sol);
-//            //...
-//            System.out.println(FO);
         } while (imp);
         return sol.FO();
     }
@@ -162,10 +228,8 @@ public class VND {
         current = sol;
         boolean imp = false;
         FO = FO_update();
-//        do {
-            imp = LS1(sol);
-//        } while (imp);
-        return sol.FO();
+        while (LS1(sol)) ;
+        return FO;
     }
 
 
@@ -242,19 +306,9 @@ public class VND {
     boolean LS1(Sol sol) {
         boolean imp = false;
         for (int i = 0; i < os.N; i++) {
-//            for (int j = os.N - 1; j > i; j--) {
             for (int j = i + 1; j < os.N; j++) {
                 if (tardAcc[i] == tardAcc[j])
                     continue; // otimização para não testar trocas inúteis
-
-                //otimização que não valeu a pena
-//                if (tardAcc[j - 1] - tardAcc[i] < deltaSwap(i, j)){
-//                   // System.out.println("opa "+i+" "+j);
-//                    continue;
-//
-//                }
-
-
                 sol.swap(i, j);
                 int z = FO(i, j);
                 if (z < FO) {
@@ -267,7 +321,6 @@ public class VND {
                 sol.swap(i, j);
             }
         }
-//        System.out.println("--");
         return imp;
     }
 
@@ -275,18 +328,18 @@ public class VND {
      * variação do custo da troca de i por j , desconsiderando o que ocorre
      * entre i e j, para i > j
      */
-    private final int deltaSwap(int i, int j) {
-        int pedidoEmI = current.order[i];
-        int pedidoEmJ = current.order[j];
-        int tardi = (i > 0) ? tardAcc[i] - tardAcc[i - 1] : tardAcc[i]; // tard do pedido na posição i
-        int novoTardi = (compTime[pedidoEmJ] > os.d[pedidoEmI]) ? compTime[pedidoEmJ] - os.d[pedidoEmI] : 0;
-        int tardj = tardAcc[j] - tardAcc[j - 1]; // tard do pedido na posição i
-        int compTimeIm1 = (i > 0) ? compTime[current.order[i - 1]] : 0;
-        int novoTardj = (compTimeIm1+os.minP[pedidoEmJ] > os.d[pedidoEmJ]) ? compTimeIm1+os.minP[pedidoEmJ] - os.d[pedidoEmJ] : 0; // valor mínimo, pode ser calculado com maior precisão em O(M)
-
-        return novoTardi - tardi + novoTardj - tardj;
-
-    }
+//    private final int deltaSwap(int i, int j) {
+//        int pedidoEmI = current.order[i];
+//        int pedidoEmJ = current.order[j];
+//        int tardi = (i > 0) ? tardAcc[i] - tardAcc[i - 1] : tardAcc[i]; // tard do pedido na posição i
+//        int novoTardi = (compTime[pedidoEmJ] > os.d[pedidoEmI]) ? compTime[pedidoEmJ] - os.d[pedidoEmI] : 0;
+//        int tardj = tardAcc[j] - tardAcc[j - 1]; // tard do pedido na posição i
+//        int compTimeIm1 = (i > 0) ? compTime[current.order[i - 1]] : 0;
+//        int novoTardj = (compTimeIm1 + os.minP[pedidoEmJ] > os.d[pedidoEmJ]) ? compTimeIm1 + os.minP[pedidoEmJ] - os.d[pedidoEmJ] : 0; // valor mínimo, pode ser calculado com maior precisão em O(M)
+//
+//        return novoTardi - tardi + novoTardj - tardj;
+//
+//    }
 
     boolean LS4(Sol sol) {
 
