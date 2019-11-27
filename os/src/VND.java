@@ -116,14 +116,16 @@ public class VND {
         fill(tard, a, b + 1, 0);
 
         for (int i = 0; i < os.M; i++) {
+            int[] pi = os.p[i];
+            int[] ai = A[i];
             for (int j = a; j <= b; j++) {
                 int k = current.order[j];
                 if (i == 0)
                     compTime[k] = 0;
-                int tmp = os.p[i][k];
+                int tmp = pi[k];
                 if (j > 0)
-                    tmp += A[i][j - 1];
-                A[i][j] = tmp;
+                    tmp += ai[j - 1];
+                ai[j] = tmp;
                 if (tmp > os.d[k]) {
                     int r = tmp - os.d[k];
                     if (r > tard[j])

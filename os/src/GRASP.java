@@ -12,10 +12,10 @@ public class GRASP implements Solver{
 
     /**número de iterações (restarts)*/
     private int ite;
-    /**número de candidatos por escolha gulosa*/
-    private int K;
+    /**proporção do número de candidatos por escolha gulosa*/
+    private double K;
 
-    public GRASP(int ite, int K){
+    public GRASP(int ite, double K){
         this.ite = ite;
         this.K = K;
     }
@@ -23,9 +23,10 @@ public class GRASP implements Solver{
     public Sol getSol(){
         return best;
     }
-
+    private int iK;
     public int run(OS os){
         this.os = os;
+        iK = 1+(int)(os.N*K);
         A = new int[os.M];
         fval = new int[os.N];
         best = new Sol(os);
@@ -66,7 +67,7 @@ public class GRASP implements Solver{
             vet.add(i);
         vet.sort(Comparator.comparingInt(a->os.d[a]));
         for (int i = 0; i < os.N; i++) {
-            int x = Utils.rd.nextInt(Math.min(K,vet.size()));
+            int x = Utils.rd.nextInt(Math.min(iK,vet.size()));
             current.order[i] = vet.remove(x);
         }
 
@@ -79,11 +80,11 @@ public class GRASP implements Solver{
                 max = A[i]+os.p[i][k];
             }
         }
-        return os.d[k] -  max;
+//        return os.d[k] -  max;
 //        return os.d[k]+  max;
 //        return Math.max(os.d[k],  max);
 //        return os.d[k] +  max;
-//        return Math.max(os.d[k], max);
+        return Math.max(os.d[k], max);
     }
 
     private int A[], fval[];
@@ -98,8 +99,9 @@ public class GRASP implements Solver{
             fval[k] = f(k,A);
         vet.sort(Comparator.comparingInt(k->fval[k]));
 
+
         for (int j = 0; j < os.N; j++) {
-            int x = Utils.rd.nextInt(Math.min(K,vet.size()));
+            int x = Utils.rd.nextInt(Math.min(iK,vet.size()));
             current.order[j] = vet.remove(x);
 
 

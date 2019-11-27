@@ -20,8 +20,10 @@ public class VNS implements Solver {
     private int W;
 
 
-    /**pares de valores kw  e número de tentativas de cada vizinhança */
-    private int kwt[][];
+    /**
+     * pares de valores kw  e número de tentativas de cada vizinhança
+     */
+    private double kwt[][];
 
     @Override
     public String toString() {
@@ -33,7 +35,7 @@ public class VNS implements Solver {
 
     Sol best;
 
-    public VNS(int ite, int kwt[][]) {
+    public VNS(int ite, double kwt[][]) {
         this.ite = ite;
         this.kwt = kwt;
     }
@@ -50,29 +52,29 @@ public class VNS implements Solver {
         int bestFO = Integer.MAX_VALUE;
         VND vnd = new VND(os);
         int v = 0;
-        K = kwt[v][0];
-        W = kwt[v][1];
-        int tries = kwt[v][2];
+        K = (int) (os.N * kwt[v][0]);
+        W = (int) (os.N * kwt[v][1]);
+        int tries = (int) (kwt[v][2]);
         for (int i = 0; i < ite; i++) {
             tries--;
-            if(tries == 0){
+            if (tries == 0) {
                 v++;
-                if(v == kwt.length)
+                if (v == kwt.length)
                     v--;
-                K = kwt[v][0];
-                W = kwt[v][1];
-                tries = kwt[v][2];
+                K = (int)(os.N*kwt[v][0]);
+                W = (int)(os.N*kwt[v][1]);
+                tries = (int)(kwt[v][2]);
             }
             perturb(current.order);
             int x = vnd.run(current);
             if (x < bestFO) {
                 bestFO = x;
                 best.copy(current);
-                System.out.println(i+ " VNS: "+v+ " - " + bestFO);
+                System.out.println(i + " VNS: " + v + " - " + bestFO);
                 v = 0;
-                K = kwt[v][0];
-                W = kwt[v][1];
-                tries = kwt[v][2];
+                K = (int)(os.N*kwt[v][0]);
+                W = (int)(os.N*kwt[v][1]);
+                tries = (int)(kwt[v][2]);
             }
 
         }

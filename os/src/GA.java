@@ -62,13 +62,16 @@ public class GA implements Solver {
         ArrayList<Sol> pop = new ArrayList<>();
         ArrayList<Sol> parents = new ArrayList<>();
         initPop(pop);
+        VND vnd = new VND(os);
         for (int k = 0; k < ite; k++) {
             Sol f;
             select(pop, parents, crossSize);
             for (int i = 0, len = parents.size(); i < len; i++) {
 
                 if (Utils.rd.nextDouble() < mutateRate) {
+
                     f = mutate(parents.get(i));
+//                    vnd.run(f);
                     if (!parents.contains(f) && !pop.contains(f))
                         parents.add(f);
                 }
@@ -98,9 +101,9 @@ public class GA implements Solver {
 //                    if(!parents.contains(f) && !pop.contains(f))
 //                        parents.add(f);
 
-//                    f = randomXCT(parents.get(i), parents.get(j));
-//                    if (!parents.contains(f) && !pop.contains(f))
-//                        parents.add(f);
+                    f = randomXCT(parents.get(i), parents.get(j));
+                    if (!parents.contains(f) && !pop.contains(f))
+                        parents.add(f);
 
 
                 }
@@ -235,15 +238,17 @@ public class GA implements Solver {
     }
 
     private Sol mutate(Sol s) {
-        int a = Utils.rd.nextInt(os.N);
-        int b = Utils.rd.nextInt(os.N);
-        while (a == b)
-            b = Utils.rd.nextInt(os.N);
         Sol m = newSol();
         m.copy(s);
-        int aux = m.order[a];
-        m.order[a] = m.order[b];
-        m.order[b] = aux;
+        for (int i = 0; i < 1; i++) {
+            int a = Utils.rd.nextInt(os.N);
+            int b = Utils.rd.nextInt(os.N);
+            while (a == b)
+                b = Utils.rd.nextInt(os.N);
+            int aux = m.order[a];
+            m.order[a] = m.order[b];
+            m.order[b] = aux;
+        }
         m.FO();
         return m;
     }
@@ -269,11 +274,12 @@ public class GA implements Solver {
 
     private void initPop(ArrayList<Sol> pop) {
         pop.clear();
-        VND vd = new VND(os);
+//        VND vd = new VND(os);
         for (int i = 0; i < popSize; i++) {
             Sol s = new Sol(os);
             Utils.shuffler(s.order);
-            vd.runLS1(s);
+//            if(Utils.rd.nextBoolean())
+//                vd.runLS1(s);
             s.FO();
             System.out.println(i+" init GA "+s.fo);
             pop.add(s);

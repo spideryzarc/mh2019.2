@@ -20,15 +20,15 @@ public class ILS implements Solver {
     /**
      * quantidade de pares trocados por perturbação
      */
-    int K;
+    double K;
     /**
      * maior distância entre elementos de uma troca
      */
-    int W;
+    double W;
 
     Sol best;
 
-    public ILS(int ite, int k, int w) {
+    public ILS(int ite, double k, double w) {
         this.ite = ite;
         this.K = k;
         this.W = w;
@@ -59,9 +59,11 @@ public class ILS implements Solver {
     }
 
     private final void perturb(Integer[] order) {
-        for (int i = 0; i < K; i++) {
+        int ik = (int)(os.N*K);
+        int iw = (int)(os.N*W);
+        for (int i = 0; i < ik; i++) {
             int x = Utils.rd.nextInt(os.N);
-            int y = x + Utils.rd.nextInt(2 * W) - W;
+            int y = x + Utils.rd.nextInt(2 * iw) - iw;
             if (y >= os.N)
                 y = os.N - 1;
             else if (y < 0)

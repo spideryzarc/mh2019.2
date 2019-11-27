@@ -10,12 +10,12 @@ public class Main {
         //System.out.println(os);
 
         RMS rms = new RMS(60);
-        ILS ils = new ILS(60, 60, 10);
-        VNS vns = new VNS(60, new int[][]{{60, 10, 5},
-                {50, 20, 5},
-                {40, 30, 5},
-                {30, 40, 20}});
-        GRASP grasp = new GRASP(60, 20);
+        ILS ils = new ILS(60, .15, .3);
+        VNS vns = new VNS(60, new double[][]{{.5, .2, 5},
+                {.10, .2, 5},
+                {.15, .3, 5},
+                {.30, .3, 5}});
+        GRASP grasp = new GRASP(60, .1);
 
         GLS gls = new GLS(10);
 
@@ -25,9 +25,9 @@ public class Main {
 
         DEA dea = new DEA(1000, 1000, .1, 0.3);
         DEA2 dea2 = new DEA2(500, 400, .2, 0.1);
-        GA ga = new GA(2000, 200, 60, .8, .25);
+        GA ga = new GA(2000, 500, 250, .5, .1);
 
-        SS ss = new SS(100, 1000, 20);
+        SS ss = new SS(10, 1000, 10);
 //        long t = System.currentTimeMillis();
 ////        rms.run();
 //        System.out.println(System.currentTimeMillis()-t);
@@ -37,11 +37,11 @@ public class Main {
 //        ils.run(os);
 //        System.out.println(System.currentTimeMillis()-t);
 
-        Solver[] s = new Solver[]{ils};
+        Solver[] s = new Solver[]{ss};
 //        Solver[] s = new Solver[]{rms, ils, vns, grasp, gls, sa, ts, dea2, ga, ss};
-//        Benchmark.run("../0160/", s, "result.txt");
+        Benchmark.run("../0160/", s, "result.txt");
 //          Benchmark.run("../0001/", s, "result.txt");
-        Benchmark.run("../benchmark/", s, "result.txt");
+//        Benchmark.run("../benchmark/", s, "result.txt");
 
     }
 }
