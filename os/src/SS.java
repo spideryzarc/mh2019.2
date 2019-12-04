@@ -60,13 +60,13 @@ public class SS implements Solver {
             do {
                 imp = false;
                 for (int i = 0, len = elite.size(); i < len; i++) {
-                    for (int j = i+1; j < len; j++)
+                    for (int j = 0; j < len; j++)
                         if (i != j) {
 //                        for (int z = 0; z < 1000; z++)
                             {
                                 //Sol x = pathRelinking(elite.get(i), elite.get(j), vnd);
-                                Sol x = randomXCT(elite.get(i), elite.get(j));
-//                                Sol x = randomX(elite.get(i), elite.get(j), .5);
+//                                Sol x = randomXCT(elite.get(i), elite.get(j));
+                                Sol x = randomX(elite.get(i), elite.get(j), .3);
                                 vnd.run(x);
                                 if (best.fo > x.fo) {
                                     best.copy(x);
